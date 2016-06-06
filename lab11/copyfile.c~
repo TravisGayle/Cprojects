@@ -1,0 +1,116 @@
+// final.c
+// Author: Sam Mustipher
+// This program is a simple creation of brick breaker using the gfx library
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <unistd.h>
+#include "gfx4.h"
+
+typedef struct Block_s{
+	int xsquare;
+	int ysquare;
+	int color1;
+	int color2;
+	int color3;
+}Block;
+
+void drawslider(double dx, double xpos, double ypos, double width, double height);
+int isinbounds(double width, double xpos, double swidth);
+
+int main(void){
+	double width = 600;
+	double height = 600;
+	double middle = width/2;
+	double dx = 10; // movement for the slider, 4 pixels each time
+	char c;
+	double deltat = 10000;
+    int i, j;
+    int xsquare,ysquare;
+    Block specs[15];
+
+	// opens the window
+	gfx_open(width, height, "Brick Breaker");
+	
+	// sets the color for the rectangle to white 
+	gfx_color(255,255,255);
+
+	// open up the slider, filled rectangle the color of white 
+	gfx_fill_rectangle(middle,middle+200,width/10,10); // good size for the slider
+	
+	double xpos = middle ; // only need xpos because the ypos is constant
+	double swidth = width/10;
+	double sheight = 10;
+	double ypos = middle+200;
+
+	// values for the circle
+	time_t t;
+	srand(time(&t)); //initialize the random number generator
+	int r = 20;
+	int vx = (rand()%15) - 8;
+	int vy = (rand()%15) - 8;
+	int cxpos = 300;
+	int cypos = 300;
+
+	int value = 1; 
+	while(value){
+		cxpos = cxpos + vx;
+		cypos = cypos + vy;
+		
+
+//initializing the blocks
+specs[0].color1= 255;
+specs[0].color2= 0;
+specs[0].color3= 51;
+
+        for(i=0; i<15; i++){
+            for(j=0; j<7; j++){
+		specs[i].xsquare=i*37.5;
+		specs[j].ysquare=j*37.5;
+		gfx_color(specs[0].color1,specs[0].color2,specs[0].color3);
+		gfx_fill_rectangle(specs[i].xsquare,specs[j].ysquare,30,30);
+
+}
+}
+
+		gfx_circle(cxpos,cypos,r);
+
+		if ((cxpos-r)<=0 || (cxpos+r)>=width){
+			if ((cxpos-r)<=0){
+				cxpos = 1 + r; 				
+			}
+			if ((cxpos+r)>=width){
+				cxpos = width- r-1;
+			}
+			vx = -vx; //change direction	
+		}
+		else if((cypos-r)<=0 || (cypos+r) >= height){
+			if ((cypos-r)<=0){
+				cypos = 1 + r;
+			}
+			if ((cypos+r) >= height){
+				cypos = height- r-1;
+			}
+			vy = -vy; // change direction 
+		}
+		usleep(deltat);
+
+	}
+
+return 0;
+} 
+
+void drawslider(double dx, double xpos, double ypos, double width, double height){
+	gfx_fill_rectangle(xpos, ypos, width, height); 
+}
+
+int isinbounds(double width, double xpos, double swidth){
+	int value = 1;
+	if( (xpos>=width-swidth) || (xpos<=0) ){
+		value = 0;
+	}
+	return value;
+}
+
+

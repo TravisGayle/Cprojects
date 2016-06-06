@@ -1,0 +1,28 @@
+Lab#4 Part 3 Report
+
+From the user perspective:
+
+The user is prompted to pick a number that corresponds to a different question.
+If the user picks an option between 1 and 4, the user is prompted with either
+more information or is requested for more number picking--in this case, the
+year. If another option is picked, the user exits and is no longer prompted.
+
+From the internal perspective:
+
+The program has 4 conditions in which if none are met, the program is exited.
+Based on the numbers that are inputted, the program reads that number and 
+proceeds. Because the assignment asked us to do so, we created functions 
+and the program called these functions. The purpose of doing so was so that 
+the lines of codes could be reduced and so that if the program wanted to use
+a portion of code again, it could be called easily.
+
+Verifying Program Correctness:
+
+In other words, how accurate was my program and how was the accuracy calculated?
+The program was accurate. In order to check results, I input a value as the user
+and checked to see if years or records corresponded between program based data
+and actual data already stored on the internet.
+
+Written by: Travis Gayle
+CSE20211 LAB 4 REPORT
+09/28/2015 

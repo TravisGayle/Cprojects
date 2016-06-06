@@ -1,0 +1,26 @@
+// Travis Gayle
+// Lab Report
+//12.08.15
+//Extra Credit: Conway's Game of Life
+
+
+
+This program was similar to the crossword.c program in a few ways. The program called for us to create multiple boards that had the ability to constantly be updated as long as the user input one of the letters requested. The user inputs however many coordinates (s)he wants on the board as long as they are in the 40 x 40 parameter. Then, once the user is done, the user presses n to display the next move in the program or p to run the program continuously. Running the program continuously can result in cool scenes or they can result in no cells at all--indicating that the user has lost the game. The following is a link to learn about the rules of the game. I also based my still life and glider off of this website by counting the location of each cell from a particular point that I would treat like an origin:
+
+https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
+
+The internal program reads in a file (argc==2) or the coordinates that the user enters (argc==1). It then creates different cases for if the user wishes for an action to occur such as a which corresponds to add cell. Functions were created for initializing the board, like what we saw in crossword.c- but with '|' in the first position of the 2D array instead of '.' or '#' throughout the board. Functions were created for removing a cell, adding a cell, printing the new board, reading in input, and checking if a cell had neighbors. The board is looped over at every position to check if a word has another 'X' next to it. 'X' denotes a cell. To ensure that the program ran, I tried both inserting a file and entering different coordinates--being sure not to try the same numbers all of the time.I also confirmed with a few of the Wikipedia still lifes and oscillations based on their location to see if my program would match that and eventually it did.
+
+
+According to the CSE Fund Comp I website:
+
+The scenes you will create will demonstrate a wide variety of behavior within Life:
+scene1.txt  should show four different "still life" objects that do not change as time passes.
+scene2.txt  should show four different "oscillators" that progress through two or more stages, but always return to the same shape.
+scene3.txt  should show four different objects that move across the screen in different directions. 
+scene4.txt  should show an "explosion" that creates a large amount of initial activity, but then settles down into still life, oscillators, or nothing.
+scene5.txt  is your choice: show something unusual or unexpected.
+
+Scene 1 is modeled after the basic still lifes on Wikipedia. Scene 3 is also modeled after the famous gliding gun. Scene 2 shows for oscillators that remind me of Christmas because of their snowflake shape. Scene 4 creates an explosion which I just experimented with an came up with based on a cool number pattern. Scene 5 encompassed a lot of what the other scenes had, but what was unexpected was that the program did not stop. Most of the cells become still ifes, but two groups of cells survived to tell the tale of how they came to be.
+
+Hopefully I fulfilled all parts of the task.

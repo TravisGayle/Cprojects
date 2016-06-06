@@ -1,0 +1,19 @@
+Travis Gayle
+Lab #6 Report
+
+From the user perspective, the program is very interactive. It first asks the user to enter the file 
+that it wants to display. From there on, the awesomeness occurs. The user is offered a list	
+of options to choose from. The user can choose to have the information within the file displayed,
+the user can add a word to the list of words, the user can search for a word or phrase or even 
+character like a regular computer function would with control f, the user can save the information
+to a new file, and the user can print the information of the file in reverse order. I can already
+tell that the user likes this program. From the perspective of the computer, it asks the user
+for the file name and then the computer reads it in. Once read in, the program places each string, 
+which is nothing but an array of characters into an array based on the amount of memory we 
+allocated to that array. The end result is an array of an array of strings OR an array of
+characters OR a two dimensional array. Furthermore, based on what the user enters, the program
+goes into different cases to perform an action such adding the new phrase to the list of
+already existing arrays. To verify that the output of the program was correct, I ran it multiple 
+times to test the different cases. I experienced many errors at first, but finally got my
+program to work. I also checked to see that the newfile was in my directory and that it contained the 
+correct or expected information after that new file was created.

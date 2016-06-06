@@ -1,0 +1,15 @@
+For part 3 of the lab, I had to think of a formula that was not trivial.
+Since I worked at a hedge fund this past summer, I saw it necessary to
+do something along the lines of taxes. From the perspective of the user,
+the program is meant to calculate the tax that the user has to pay,
+along with the grand total based on numerous inputs. If the user entered
+a negative subtotal an error message would display. From the perspective
+of a programmer, an input would be entered, then scanned, following two
+lines of calculations whose results displayed based on the final lines
+of code. I had a few problems getting the code to work in the beginning.
+The inputs would be entered and everything would return as 0. I finally
+solved the problem by adding the “&” sign before the variable in the
+scanning portions. My problem was solved, and to check I used a entered
+inputs, calculated the results and matched it to a calculator for
+verification.
+

@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include "gfx5.c"
+#include "gfxe.h"
+
+int main( int argc, char * argv[] ) {
+	
+	// Open a window!
+	gfx_open( 500, 443, "BRICK BREAKER!" );
+	/*
+	// Get a color!
+	gfx_predefined_color( "firebrick1" );
+	
+	// Draw something!
+	XPoint p[] = {{250, 0}, {0,433}, {500, 433}, {250, 0}};
+	gfx_fill_polygon( p, 4 );
+
+	// Get a color!
+	gfx_predefined_color( "black" );
+	
+	// Draw something!
+	XPoint q[] = {{250, 20}, {20, 423}, {480, 423}, {250, 20}};
+	gfx_fill_polygon( q, 4 );
+	
+	// Get a color!
+	gfx_predefined_color( "firebrick3" );
+	
+	// Draw something!
+	gfx_fill_circle( 250, 289, 134 );
+	
+	// Get a color!
+	gfx_predefined_color( "black" );
+	
+	// Draw something!
+	gfx_fill_circle( 250, 289, 124 );
+	
+	// Get a color!
+	gfx_predefined_color( "firebrick4" );
+	
+	// Draw something!
+	XPoint t[] = {{250, 20}, {255, 29}, {255, 423}, {245, 423}, {245, 29}, {250, 20}};
+	gfx_fill_polygon( t, 6 );
+	
+	// Get a color!
+	gfx_predefined_color( "white" ); */
+	
+	// Draw something!
+	gfx_text( 50, 110, "  Harry Potter " );
+	gfx_text( 50, 122, "    and the    " );
+	gfx_text( 50, 134, "Deathly Hallows" );
+		
+	// Wait to close
+	gfx_wait();
+	return 0;
+}

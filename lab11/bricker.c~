@@ -1,0 +1,244 @@
+// brick.c
+// Author: Sam Mustipher & Travis Gayle
+// This program creates the game brick breaker with three different levels that increase with difficulty
+
+typedef struct Block_s{
+	int xsquare;
+	int ysquare;
+	int color1;
+	int color2;
+	int color3;
+	int numhits;
+	int numhits2;
+}Block;
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <unistd.h>
+#include <string.h>
+#include "gfx5.h"
+#include "gfxe.h"
+
+// function prototypes
+int isinbounds(double width, double xpos[], double swidth);
+void moveslider(double xpos[], double ypos[], double width, double height, double swidth, double sheight, double sdx[], int deltat);
+void drawslider(double xpos[], double ypos[], double swidth, double sheight);
+int bounce(double width, double height, double xpos[], double ypos[], double velb[], Block specs[], double swidth, double sheight);
+void drawsquares(double xpos[], double ypos[], double velb[], int r, Block specs[]);
+int inboard(double ypos[], int sheight, int r);
+void blockhit(double xpos[], double ypos[], double velb[], int r, Block specs[]);
+void sliderhit(double xpos[], double ypos[], double velb[], double swidth);
+
+
+
+int main(int argc, char * argv[]){
+	// open the main window
+	double width = 500;
+	double height = 500;
+	double middle = width/2;
+	double xpos[3] = {0};
+	double ypos[3] = {0};
+	double sdx[3] = {0}; // every slider will have its own speed
+	int r=2;
+	gfx_open( 500, 500, "BRICK BREAKER!" );
+
+	gfx_changefont("lucidasans-24");
+
+	gfx_text( 200, 110, "Welcome " );
+	gfx_text( 50, 142, "Are you ready to break bricks?!    " );
+	gfx_text( 25, 174, "Please place your cursor on the screen" ); 
+		
+	// Wait to close
+	gfx_wait();
+	//return 0;
+
+	// Values for the Blocks
+	double xsquare,ysquare;
+	int numsquares = 105;
+  Block specs[numsquares]; // array of structs 
+	specs[0].color1= 255;
+	specs[0].color2= 0;	
+	specs[0].color3= 51;
+	int i,j;
+	for(i = 0; i<10; i++){
+		specs[i].numhits = 0; 
+	}
+	for(j = 0; j<5; j++){
+		specs[j].numhits2 = 0; 
+	}
+
+	// initializing values
+	int value = 1;
+	int deltat = 22000;
+	
+	// values for the slider
+	xpos[0] = middle ;
+	ypos[0] = middle+240;
+	double swidth = width/10;
+	double sheight = 10;
+	sdx[0] = 28;
+
+	// values for the ball
+	double velb[2];
+	velb[0] = 2; // velocity in the x direction
+	velb[1] = 2;	// in the y 
+	xpos[1] = 300;
+	ypos[1] = 300;
+  
+	
+	// initializing the number of lives
+	int numlives = 3;
+	int *ptr = &numlives; // when passing into the function use *ptr 
+	while(numlives>0){
+		usleep(deltat);
+		gfx_clear();
+
+		// drawing the blocks on the screen
+		drawsquares(xpos, ypos, velb,r, specs); 
+  
+		// draws the slider
+		drawslider(xpos, ypos, swidth, sheight);
+
+		// bounces the ball
+		bounce(width,height,xpos,ypos, velb, specs, swidth, sheight);
+
+		// moves the slider 
+		if(gfx_event_waiting()){
+			moveslider(xpos,ypos,width,height,swidth,sheight,sdx,deltat); 
+		}
+	}
+return 0;
+}
+
+
+
+void moveslider(double xpos[], double ypos[], double width, double height, double swidth, double sheight, double sdx[], int deltat){
+	char c; 
+	c = gfx_wait();
+	if(isinbounds(width, xpos, swidth)){ // checks to see if the slider is in bounds 
+		if (c == 83){
+			xpos[0] = xpos[0] + sdx[0];
+		}
+		if (c == 81){
+			xpos[0] = xpos[0] - sdx[0];
+		}
+	}
+	else{
+		if(xpos[0]<=0){				
+				xpos[0] = xpos[0] + sdx[0];
+		}
+		if(xpos[0]>=width-swidth){
+			xpos[0] = xpos[0] - sdx[0];				
+		}
+	}
+	
+	drawslider(xpos, ypos, swidth, sheight);
+}
+
+void drawslider(double xpos[], double ypos[], double swidth, double sheight){
+	gfx_fill_rectangle(xpos[0], ypos[0], swidth, sheight); 
+}
+
+int isinbounds(double width, double xpos[0], double swidth){
+	int value = 1;
+	if( (xpos[0]>=width-swidth) || (xpos[0]<=0) ){
+		value = 0;
+	}
+	return value;
+}
+
+int bounce(double width, double height, double xpos[], double ypos[], double velb[], Block specs[], double swidth, double sheight){
+	int r = 2;
+	int value = 1;
+	int z=0;
+	// bound checker for the board
+	gfx_circle(xpos[1], ypos[1], r);
+	if ((xpos[1]-r)<=0 || (xpos[1]+r)>=width){
+		velb[0] = -velb[0]; //change direction	
+	}
+	if((ypos[1]-r)<=0){
+		velb[1] = -velb[1]; // change direction 
+	}
+
+	if((ypos[1] >= height)){
+		velb[1] = velb[1];
+		gfx_changefont("lucidasans-24");
+		gfx_text( 190, 325, "GAME OVER! " );
+		value = 0;
+	}
+
+	// checks if the ball is past the board
+	//if(inboard(ypos, sheight, r)){
+		blockhit(xpos, ypos, velb,r, specs);
+		sliderhit(xpos, ypos, velb, swidth);
+	//}
+	xpos[1] = xpos[1] + velb[0];
+	ypos[1] = ypos[1] + velb[1];
+	gfx_circle(xpos[1],ypos[1],r);	
+}
+
+void drawsquares(double xpos[], double ypos[], double velb[], int r, Block specs[]){
+	int i, j; // initializing the counters
+	for(i=0; i<10; i++){
+		   for(j=0; j<5; j++){
+				specs[i].xsquare=i*50;
+				specs[j].ysquare=j*40;
+				//if numhits is greater than 0, do not draw
+				if((specs[i].numhits>0)&& (specs[j].numhits2>0)){				continue;
+				}
+				else{
+				gfx_color(specs[0].color1,specs[0].color2,specs[0].color3);
+				}
+				gfx_fill_rectangle(specs[i].xsquare,specs[j].ysquare,25, 10);
+				
+			 }	
+		}  
+}
+
+void sliderhit(double xpos[], double ypos[], double velb[], double swidth){
+	if(((xpos[0]+swidth>=xpos[1])&&(xpos[0]<=xpos[1]))&&(ypos[0]<=ypos[1])){
+		velb[1] = -velb[1]; 
+
+	}
+}
+
+void blockhit(double xpos[], double ypos[], double velb[], int r, Block specs[]){
+	int i,j;
+	for(i=0; i<10; i++){
+   for(j=0; j<5; j++){
+			if((xpos[1]<=specs[i].xsquare+25)&&(xpos[1]>=specs[i].xsquare)){ // checks the bottom
+				if((ypos[1]-r)<=specs[j].ysquare+10){
+					velb[1] = -1*velb[1]; // changes the y velocity	
+					 specs[i].numhits++;
+					 specs[j].numhits2++;	
+					 &specs[j].ysquare=NULL;
+					//printf("i hits: %d   jhits: %d  ypos[1]: %d   specs[j].ysquare: %d\n", specs[i].numhits, specs[j].numhits,ypos[1], specs[j].ysquare);
+ 				}
+			}
+			if((ypos[1]>=specs[j].ysquare)&&(ypos[1]<=specs[j].ysquare+10)){ // checks the right side
+				if(xpos[1]<=specs[i].xsquare+25){
+					velb[0] = -1*velb[0]; // changes the x velocity
+					//specs[i].numhits++;
+				}
+			}
+			if((ypos[1]>=specs[j].ysquare)&&(ypos[1]<=specs[j].ysquare+10)){ // checks the left side
+				if(xpos[1]>=specs[i].xsquare){					
+					velb[0] = -1*velb[0]; // changes the x velocity
+					//specs[i].numhits++; 
+	}
+				}
+			}
+	 }	
+	}
+
+
+int inboard(double ypos[], int sheight, int r){
+	int value = 1;
+	if(ypos[1]>=ypos[0]+sheight){ // if the ypos of the ball is greater than the board+the height of the slider
+		value = 0;
+	}
+	return value;
+}
+
+
